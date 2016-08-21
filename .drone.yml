@@ -24,13 +24,14 @@ deploy:
     when:
       branch: develop
     commands:
-      - echo "DEVELOP"
+      - php rocketeer.par check
+      - php rocketeer.phar deploy --stage=staging --no-interaction
   rocketeer:
     image: framgia/drone-plugin-ssh-php:php5
     when:
       branch: master
     commands:
-      - echo "MASTER"
+      - php rocketeer.phar deploy --stage=production --no-interaction
 cache:
   mount:
     - .git
