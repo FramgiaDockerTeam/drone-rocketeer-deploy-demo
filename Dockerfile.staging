@@ -1,0 +1,5 @@
+FROM framgia/laravel-nginx-php-fpm
+COPY . /var/www/laravel
+RUN cd /var/www/laravel && cp .env.staging .env
+
+WORKDIR /var/www/laravel

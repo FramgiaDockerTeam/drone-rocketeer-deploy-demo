@@ -1,0 +1,31 @@
+build:
+  image: framgia/laravel-workspace
+  commands:
+    - sleep 30
+    - chmod -R 777 storage/
+    - chmod -R 777 bootstrap/cache/
+    - composer install
+    - npm install
+    - gulp
+    - cp .env.testing .env
+    - php artisan migrate --database=mysql_test
+    - vendor/bin/phpunit
+compose:
+  database:
+    image: mysql
+    environment:
+      MYSQL_DATABASE: demo
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+      MYSQL_ROOT_PASSWORD: root
+deploy:
+  rocketeer:
+    image: framgia/drone-plugin-ssh-php
+    commands:
+      - pwd
+      - ls -la
+cache:
+  mount:
+    - .git
+    - vendor
+    - node_modules

@@ -1,0 +1,101 @@
+version: '2'
+
+services:
+    application:
+        container_name: demo_application
+        image: debian
+        volumes:
+            - ./:/var/www/laravel
+    workspace:
+        container_name: demo_workspace
+        restart: always
+        image: framgia/laravel-workspace
+        volumes_from:
+            - application
+        tty: true
+    php-fpm:
+        container_name: demo_php-fpm
+        restart: always
+        image: framgia/laravel-php-fpm
+        volumes_from:
+            - application
+        expose:
+            - "9000"
+        links:
+            - workspace
+    nginx:
+        container_name: demo_nginx
+        restart: always
+        image: framgia/laravel-nginx
+        volumes_from:
+            - data
+            - logs
+            - application
+        ports:
+            - "8000:80"
+        links:
+            - php-fpm
+    data:
+        container_name: demo_data
+        image: debian
+        volumes:
+            - /private/var/lib/demo_mysql:/var/lib/mysql
+            - /private/var/lib/demo_data:/data
+            - /private/var/lib/demo_logs/nginx:/var/log/nginx
+    data_test:
+        container_name: demo_data_test
+        image: debian
+        volumes:
+            - /private/var/lib/demo_mysql_test:/var/lib/mysql
+            - /private/var/lib/demo_data_test:/data
+    logs:
+        container_name: demo_logs
+        image: debian
+        volumes:
+            - /private/var/lib/demo_logs/nginx:/var/log/nginx
+            - /private/var/lib/demo_logs/mongodb:/var/log/mongodb
+            - /private/var/lib/demo_logs/mysql:/var/log/mysql
+    mysql:
+        container_name: demo_mysql
+        restart: always
+        image: mysql
+        volumes_from:
+            - data
+            - logs
+        expose:
+            - "3306"
+        environment:
+            MYSQL_DATABASE: demo
+            MYSQL_USER: test
+            MYSQL_PASSWORD: test
+            MYSQL_ROOT_PASSWORD: root
+    mysql_test:
+        container_name: demo_mysql_test
+        restart: always
+        image: mysql
+        volumes_from:
+            - data_test
+        expose:
+            - "3306"
+        environment:
+            MYSQL_DATABASE: demo
+            MYSQL_USER: test
+            MYSQL_PASSWORD: test
+            MYSQL_ROOT_PASSWORD: root
+    mongo:
+        container_name: demo_mongo
+        restart: always
+        image: mongo
+        expose:
+            - "27017"
+        volumes_from:
+            - data
+            - logs
+    redis:
+        container_name: demo_redis
+        restart: always
+        image: redis
+        expose:
+            - "6379"
+        volumes_from:
+            - data
