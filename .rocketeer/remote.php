@@ -31,6 +31,7 @@ return [
     // user uploaded data, file-based databases, etc.
     'shared'         => [
         'storage',
+        'bootstrap/cache',
         '.env',
     ],
 

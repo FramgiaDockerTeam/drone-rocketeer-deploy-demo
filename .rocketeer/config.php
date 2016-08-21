@@ -38,8 +38,8 @@ return [
     // and store them locally
     'connections'      => [
         'staging' => [
-            'host'      => '',
-            'username'  => '',
+            'host'      => '10.0.1.127',
+            'username'  => 'deploy',
             'password'  => '',
             'key'       => '',
             'keyphrase' => '',
