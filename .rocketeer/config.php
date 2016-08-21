@@ -63,9 +63,9 @@ return [
     // to the stage or connection currently in use.
     // Per example :
     'stages' => [
-     	'staging' => [
-     		'scm' => ['branch' => 'staging'],
-     	],
+        'staging' => [
+            'scm' => ['branch' => 'develop'],
+        ],
         'production' => [
             'scm' => ['branch' => 'master'],
         ],
