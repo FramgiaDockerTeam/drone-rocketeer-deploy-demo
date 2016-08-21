@@ -1,7 +1,7 @@
 build:
   image: framgia/laravel-workspace
   commands:
-    - sleep 30
+    - sleep 40
     - chmod -R 777 storage/
     - chmod -R 777 bootstrap/cache/
     - composer install
@@ -24,7 +24,6 @@ deploy:
     when:
       branch: develop
     commands:
-      - php rocketeer.par check
       - php rocketeer.phar deploy --stage=staging --no-interaction
   rocketeer:
     image: framgia/drone-plugin-ssh-php:php5
