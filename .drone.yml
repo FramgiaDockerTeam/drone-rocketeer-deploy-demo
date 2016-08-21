@@ -30,7 +30,7 @@ deploy:
     when:
       branch: master
     commands:
-      - php rocketeer.phar deploy --stage=production --no-interaction
+      - php rocketeer.phar deploy --stage=production --branch=master --no-interaction
 cache:
   mount:
     - .git
