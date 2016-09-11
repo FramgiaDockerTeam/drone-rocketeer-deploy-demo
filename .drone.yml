@@ -1,7 +1,7 @@
 build:
   image: framgia/laravel-workspace
   commands:
-    - sleep 40
+    - sleep 60
     - chmod -R 777 storage/
     - chmod -R 777 bootstrap/cache/
     - composer install
