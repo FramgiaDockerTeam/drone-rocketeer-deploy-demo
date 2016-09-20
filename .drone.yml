@@ -20,13 +20,13 @@ compose:
       MYSQL_ROOT_PASSWORD: root
 deploy:
   rocketeer:
-    image: framgia/drone-plugin-ssh-php:php5
+    image: fdplugins/ssh-php:php5
     when:
       branch: develop
     commands:
       - php rocketeer.phar deploy --stage=staging --no-interaction
   rocketeer:
-    image: framgia/drone-plugin-ssh-php:php5
+    image: fdplugins/ssh-php:php5
     when:
       branch: master
     commands:
