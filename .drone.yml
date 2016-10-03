@@ -20,17 +20,17 @@ compose:
       MYSQL_ROOT_PASSWORD: root
 deploy:
   rocketeer:
-    image: fdplugins/ssh-php:php5
+    image: fdplugins/rocketeer:php5
     when:
       branch: develop
     commands:
-      - php rocketeer.phar deploy --stage=staging --no-interaction
+      - rocketeer deploy --stage=staging --no-interaction
   rocketeer:
-    image: fdplugins/ssh-php:php5
+    image: fdplugins/rocketeer:php5
     when:
       branch: master
     commands:
-      - php rocketeer.phar deploy --stage=production --branch=master --no-interaction
+      - rocketeer deploy --stage=production --branch=master --no-interaction
 notify:
   chatwork:
     image: fdplugins/chatwork
