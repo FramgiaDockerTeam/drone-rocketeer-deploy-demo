@@ -7,7 +7,7 @@ build:
     - composer install
     - npm install
     - gulp
-    - cp .env.testing .env
+    - cp .env.testing.example .env
     - php artisan migrate --database=mysql_test
     - vendor/bin/phpunit
 compose:
