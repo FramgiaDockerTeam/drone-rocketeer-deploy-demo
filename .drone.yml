@@ -31,6 +31,11 @@ deploy:
       branch: master
     commands:
       - php rocketeer.phar deploy --stage=production --branch=master --no-interaction
+notify:
+  chatwork:
+    image: fdplugins/chatwork
+    room_id: $$CHATWORK_ROOM_ID
+    token: $$CHATWORK_TOKEN
 cache:
   mount:
     - .git
