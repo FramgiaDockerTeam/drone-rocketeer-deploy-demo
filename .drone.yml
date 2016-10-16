@@ -1,15 +1,31 @@
 build:
   image: framgia/laravel-workspace
   commands:
-    - sleep 60
+    - START=$(date +%s)
     - chmod -R 777 storage/
     - chmod -R 777 bootstrap/cache/
     - composer install
-    - npm install
+    - yarn
     - gulp
     - cp .env.testing.example .env
+    - phpmetrics --report-html=reports/metrics.html
+        --report-xml=reports/metrics.xml
+        app
+    - pdepend --summary-xml=reports/pdepend.xml
+        --jdepend-chart=reports/pdepend.svg
+        --overview-pyramid=reports/pyramid.svg
+        app
+    - phpcpd --log-pmd=reports/phpcpd.xml app
+    - phpmd app xml codesize --reportfile reports/phpmd.xml
+    - phpcs --standard=Framgia --report-xml=reports/phpcs.xml app
+    - eslint --format=checkstyle
+        --output-file=reports/eslint.xml
+        resources/assets/js/
     - php artisan migrate --database=mysql_test
-    - vendor/bin/phpunit
+    - php -dzend_extension=xdebug.so vendor/bin/phpunit
+        --coverage-clover=reports/coverage-clover.xml
+        --coverage-html=reports/coverage
+    - echo $(($(date +%s) - $START))
 compose:
   database:
     image: mysql
@@ -24,13 +40,17 @@ deploy:
     when:
       branch: develop
     commands:
+      - START=$(date +%s)
       - rocketeer deploy --stage=staging --no-interaction
+      - echo $(($(date +%s) - $START))
   rocketeer:
     image: fdplugins/rocketeer:php5
     when:
       branch: master
     commands:
+      - START=$(date +%s)
       - rocketeer deploy --stage=production --branch=master --no-interaction
+      - echo $(($(date +%s) - $START))
 notify:
   chatwork:
     image: fdplugins/chatwork
