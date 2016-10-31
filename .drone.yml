@@ -21,6 +21,7 @@ build:
     - eslint --format=checkstyle
         --output-file=reports/eslint.xml
         resources/assets/js/
+    - sleep 10
     - php artisan migrate --database=mysql_test
     - php -dzend_extension=xdebug.so vendor/bin/phpunit
         --coverage-clover=reports/coverage-clover.xml
@@ -52,10 +53,13 @@ deploy:
       - rocketeer deploy --stage=production --branch=master --no-interaction
       - echo $(($(date +%s) - $START))
 notify:
-  chatwork:
-    image: fdplugins/chatwork
-    room_id: $$CHATWORK_ROOM_ID
-    token: $$CHATWORK_TOKEN
+  rocketeer:
+    image: fdplugins/rocketeer:php5
+    commands:
+      - pwd
+      - ls -la
+      - ls -la ~/
+      - ls -la /
 cache:
   mount:
     - .git
