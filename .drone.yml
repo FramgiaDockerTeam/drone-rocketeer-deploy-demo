@@ -1,7 +1,6 @@
 build:
   image: framgia/laravel-workspace
   commands:
-    - START=$(date +%s)
     - chmod -R 777 storage/
     - chmod -R 777 bootstrap/cache/
     - composer install
@@ -21,12 +20,11 @@ build:
     - eslint --format=checkstyle
         --output-file=reports/eslint.xml
         resources/assets/js/
-    - sleep 10
+    - sleep 30
     - php artisan migrate --database=mysql_test
     - php -dzend_extension=xdebug.so vendor/bin/phpunit
         --coverage-clover=reports/coverage-clover.xml
         --coverage-html=reports/coverage
-    - echo $(($(date +%s) - $START))
 compose:
   database:
     image: mysql
@@ -41,25 +39,13 @@ deploy:
     when:
       branch: develop
     commands:
-      - START=$(date +%s)
       - rocketeer deploy --stage=staging --no-interaction
-      - echo $(($(date +%s) - $START))
   rocketeer:
     image: fdplugins/rocketeer:php5
     when:
       branch: master
     commands:
-      - START=$(date +%s)
       - rocketeer deploy --stage=production --branch=master --no-interaction
-      - echo $(($(date +%s) - $START))
-notify:
-  rocketeer:
-    image: fdplugins/rocketeer:php5
-    commands:
-      - pwd
-      - ls -la
-      - ls -la ~/
-      - ls -la /
 cache:
   mount:
     - .git
